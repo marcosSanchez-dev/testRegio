@@ -14,6 +14,12 @@ const regioAmbientTexture = textureLoader.load('/textures/ao_map.png')
 const regioNormalTexture = textureLoader.load('/textures/normal.png')
 const regioRoughTexture = textureLoader.load('/textures/roughness.png')
 
+const bioPNG = textureLoader.load('/buttons/bio.png')
+const otrosPNG = textureLoader.load('/buttons/otros.png')
+const promoPNG = textureLoader.load('/buttons/promo.png')
+const regresarPNG = textureLoader.load('/buttons/regresar.png')
+const resistentesPNG = textureLoader.load('/buttons/resistentes.png')
+
 // Debug
 //const gui = new dat.GUI()
 
@@ -30,7 +36,7 @@ objectLoader.load(
     '/models/regio/ToallasOBJ.obj',
     (gltf) => {
         console.log('exito!');
-        console.log(gltf);
+        //console.log(gltf);
         const regioMesh = [...gltf.children]
         scene.add(regioMesh[0])
 
@@ -51,9 +57,67 @@ objectLoader.load(
     }
 )
 
+//buttons
+const buttonsGroup = new THREE.Group()
+buttonsGroup.position.set(3,0,0)
+scene.add(buttonsGroup)
+
+const bioButton = new THREE.Mesh(
+    new THREE.PlaneGeometry(2,1),
+    new THREE.MeshStandardMaterial({
+        map: bioPNG,
+        side: THREE.DoubleSide,
+        transparent: true
+    })
+)
+bioButton.position.set(0,1,0)
+
+const otrosButton = new THREE.Mesh(
+    new THREE.PlaneGeometry(2,1),
+    new THREE.MeshStandardMaterial({
+        map: otrosPNG,
+        side: THREE.DoubleSide,
+        transparent: true
+    })
+)
+otrosButton.position.set(0,2.5,0)
+
+const promoButton = new THREE.Mesh(
+    new THREE.PlaneGeometry(2,1),
+    new THREE.MeshStandardMaterial({
+        map: promoPNG,
+        side: THREE.DoubleSide,
+        transparent: true
+    })
+)
+promoButton.position.set(2.5,1,0)
+
+/*const regresarButton = new THREE.Mesh(
+    new THREE.PlaneGeometry(2,1),
+    new THREE.MeshStandardMaterial({
+        map: regresarPNG,
+        side: THREE.DoubleSide,
+        transparent: true
+    })
+)
+regresarButton.position.set(6,3,0)*/
+
+const resistentesButton = new THREE.Mesh(
+    new THREE.PlaneGeometry(2,1),
+    new THREE.MeshStandardMaterial({
+        map: resistentesPNG,
+        side: THREE.DoubleSide,
+        transparent: true
+    })
+)
+resistentesButton.position.set(2.5,2.5,0)
+
+
+buttonsGroup.add(bioButton,otrosButton,promoButton,resistentesButton)
 /**
  * Floor
  */
+/*
 const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(10, 10),
     new THREE.MeshStandardMaterial({
@@ -65,6 +129,7 @@ const floor = new THREE.Mesh(
 floor.receiveShadow = true
 floor.rotation.x = - Math.PI * 0.5
 scene.add(floor)
+*/
 
 /**
  * Lights
@@ -82,6 +147,18 @@ directionalLight.shadow.camera.right = 7
 directionalLight.shadow.camera.bottom = - 7
 directionalLight.position.set(5, 5, 5)
 scene.add(directionalLight)
+
+const pointLight = new THREE.PointLight('white')
+pointLight.position.set(0,3,3)
+//scene.add(pointLight)
+
+//HELPERS
+
+const axisHelper = new THREE.AxisHelper(2)
+//scene.add(axisHelper)
+
+const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.2)
+//scene.add(pointLightHelper)
 
 /**
  * Sizes
@@ -116,6 +193,10 @@ scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
+//controls.minAzimuthAngle = - 0.5; // radians
+//controls.maxAzimuthAngle = 0.5; // radians
+controls.minPolarAngle = 1.3; // radians
+controls.maxPolarAngle = 0.5; // radians
 controls.target.set(0, 0.75, 0)
 controls.enableDamping = true
 

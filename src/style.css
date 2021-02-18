@@ -17,3 +17,16 @@ body
     left: 0;
     outline: none;
 }
+/*
+.button{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background:red;
+}
+
+.button-0{
+    height: 40px;
+    width: 40px;
+}
+*/

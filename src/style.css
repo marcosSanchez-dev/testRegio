@@ -20,9 +20,9 @@ body
 }
 .button{
     position: absolute;
-    height: 3vw;
-    width: 12vw;
-    left: 52vw;
+    height: 8vw;
+    width: 23vw;
+    left: 75vw;
     display: flex;
     vertical-align: middle;
     justify-content: center;
@@ -34,16 +34,16 @@ body
     box-shadow:rgba(255,255,255,0.5) 1px 1px 10px 5px;
 }
 .button-0{
-    top: 25%;
+    top: 36%;
 }
 .button-1{
-    top: 35%;
+    top: 42%;
 }
 .button-2{
-    top: 45%;
+    top: 48%;
 }
 .button-3{
-    top: 55%;
+    top: 54%;
 }
 img{
     width: 100%;
@@ -54,11 +54,11 @@ iframe{
 }
 .video-0{
     position: absolute;
-    left: 20%;
-    top: 20%;
+    left: 15%;
+    top: 5%;
     z-index: 2;
-    width: 55vw;
-    height: 55vh;
+    width: 65vw;
+    height: 25vh;
 }
 .hide{
     display: none;
@@ -69,14 +69,23 @@ iframe{
 
 .hide-button-0{
     position: absolute;
-    right: 10%;
-    top: 10%;
-    height: 3vw;
-    width: 3vw;
-    filter: invert(100%);
+    right: 5%;
+    top: 5%;
+    height: 7vw;
+    width: 7vw;
+    /*filter: invert(100%);*/
     cursor: pointer;
+    background: red;
 }
 
 .hide-button-0:hover{
     border-bottom: 2px solid black;
+}
+
+video{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20vw;
+    border:1px solid blue
 }

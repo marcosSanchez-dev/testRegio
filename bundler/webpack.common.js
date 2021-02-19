@@ -10,7 +10,7 @@ module.exports = {
         filename: 'bundle.[contenthash].js',
         path: path.resolve(__dirname, '../dist')
     },
-    devtool: 'source-map',
+    devtool: 'source-map',  
     plugins:
     [
         new CopyWebpackPlugin({
@@ -82,7 +82,35 @@ module.exports = {
                         }
                     }
                 ]
+            },
+            {
+                test: /\.(mov|mp4)$/,
+                use: 
+                [
+                    {
+                        loader: 'file-loader',
+                        options: 
+                        {
+                            outputPath: 'assets/images/'
+                        }  
+                    }
+                ]
             }
+            /*,
+            {
+                test: /\.(mp4|svg|png|gif)$/,
+                use: 
+                [
+                    {
+                        loader: "file-loader",
+                        options: 
+                        {
+                            outputPath: 'assets/images/'
+                        }
+                    }
+                ]
+            }
+            */
         ]
     }
 }

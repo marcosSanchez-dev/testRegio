@@ -12,7 +12,14 @@ const otrosUsosButton = document.querySelector('.button-1')
 const promocionButton = document.querySelector('.button-2')
 const biodegradableButton = document.querySelector('.button-3')
 
-const resistentesVideo = document.querySelector('.video-0')
+const resistentesVideo = document.getElementById('video-0')
+window.addEventListener('click', () => {
+    resistentesVideo.play()
+})
+resistentesVideo.addEventListener( 'play', function () {
+    this.currentTime = 3;
+});
+console.log(resistentesVideo);
 
 resistentesButton.addEventListener('click', (e) => {
     resistentesVideo.classList.toggle('hide')
@@ -24,7 +31,11 @@ resistentesHide.addEventListener('click', (e) => {
     resistentesHide.classList.toggle('hide')
 })
 
-
+/*var video0Element = document.createElement('video');
+video0Element.src = "../static/videoTexture/resistentes.mp4";
+video0Element.load();
+console.log(video0Element);
+//video0Element.play();*/
 /**
     TEXTURAS
  */
@@ -45,6 +56,8 @@ const regresarPNG = textureLoader.load('/buttons/regresar.png')
 const resistentesPNG = textureLoader.load('/buttons/resistentes.png')
 
 const bgTexture = textureLoader.load('/background/bg_threejs.png')
+
+const video0Texture = new THREE.VideoTexture(resistentesVideo)
 
 // Debug
 //const gui = new dat.GUI()
@@ -70,7 +83,7 @@ objectLoader.load(
         scene.add(regioMesh[0])
         regioMeshGlobal.push(regioMesh[0])
         regioMesh[0].scale.set(0.5,0.5,0.5)
-        regioMesh[0].position.set(-2,1.6,0)
+        regioMesh[0].position.set(0,0.5,0)
         regioMesh[0].material.map = regioColorTexture
         regioMesh[0].material.transparent = true
         regioMesh[0].material.aoMap = regioAmbientTexture
@@ -79,6 +92,7 @@ objectLoader.load(
         regioMesh[0].material.roughness = 1
         regioMesh[0].material.metalness = 1
         regioMesh[0].material.shininess = 50
+
     },
     () => {
         console.log('esta en progreso...');
@@ -145,7 +159,6 @@ const resistentesButton = new THREE.Mesh(
 )
 resistentesButton.position.set(2.5,2.5,0)*/
 
-
 //buttonsGroup.add(bioButton,otrosButton,promoButton,resistentesButton)
 
 //SCREEN SHOT
@@ -172,21 +185,20 @@ screenRecordButton.position.set(1,0.5,1.5)
 //scene.add(screenShotButton,screenRecordButton)
 
 /**
- * Floor
+    videoTexture
  */
-/*
-const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(10, 10),
+
+const video0Mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(4, 3),
     new THREE.MeshStandardMaterial({
-        color: '#444444',
-        metalness: 0,
-        roughness: 0.5
+        map:video0Texture,
+        color: 'white',
+        side: THREE.DoubleSide,
     })
 )
-floor.receiveShadow = true
-floor.rotation.x = - Math.PI * 0.5
-scene.add(floor)
-*/
+video0Mesh.position.set(0,4,1)
+scene.add(video0Mesh)
+
 
 /**
  * Lights
@@ -212,7 +224,7 @@ pointLight.position.set(0,3,-3)
 //HELPERS
 
 const axisHelper = new THREE.AxisHelper(2)
-scene.add(axisHelper)
+//scene.add(axisHelper)
 
 const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.2)
 //scene.add(pointLightHelper)
@@ -245,7 +257,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(0, 4, 5.5)
+camera.position.set(0, 1, 10)
 scene.add(camera)
 
 // Controls
@@ -256,7 +268,8 @@ controls.minPolarAngle = 1.3; // radians
 controls.maxPolarAngle = 0.5; // radians
 controls.target.set(0, 0.75, 0)
 controls.enableDamping = true
-//controls.target.set()
+controls.target.set(0,0,0)
+controls.enablePan = false
 
 /**
  * Renderer
@@ -269,9 +282,6 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-//raycast
-
-
 /**
  * Animate
  */
@@ -283,6 +293,10 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
+
+    //videoTexture
+    //video0Texture.needsUpdate = true
+
 
     // Update controls
     controls.update()

@@ -11,8 +11,7 @@ body
     overflow: hidden;
 }
 
-.webgl
-{
+.webgl{
     position: fixed;
     top: 0;
     left: 0;
@@ -20,7 +19,7 @@ body
 }
 .button{
     position: absolute;
-    height: 8vw;
+    height: 7vw;
     width: 23vw;
     left: 75vw;
     display: flex;

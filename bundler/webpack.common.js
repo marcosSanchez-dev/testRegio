@@ -84,7 +84,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(mov|mp4)$/,
+                test: /\.(webm|mov|mp4)$/,
                 use: 
                 [
                     {

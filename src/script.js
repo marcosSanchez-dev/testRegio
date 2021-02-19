@@ -4,32 +4,15 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { Vector3 } from 'three'
+import gsap from 'gsap'
 
 //DOM
-const resistentesButton = document.querySelector('.button-0')
-const resistentesHide = document.querySelector('.hide-button-0')
-const otrosUsosButton = document.querySelector('.button-1')
+const hideButton = document.querySelector('.hide-button-0')
+
 const promocionButton = document.querySelector('.button-2')
-const biodegradableButton = document.querySelector('.button-3')
 
 const resistentesVideo = document.getElementById('video-0')
-window.addEventListener('click', () => {
-    resistentesVideo.play()
-})
-resistentesVideo.addEventListener( 'play', function () {
-    this.currentTime = 3;
-});
-console.log(resistentesVideo);
-
-resistentesButton.addEventListener('click', (e) => {
-    resistentesVideo.classList.toggle('hide')
-    resistentesHide.classList.toggle('hide')
-})
-
-resistentesHide.addEventListener('click', (e) => {
-    resistentesVideo.classList.toggle('hide')
-    resistentesHide.classList.toggle('hide')
-})
+const otrosVideo = document.getElementById('video-1')
 
 /*var video0Element = document.createElement('video');
 video0Element.src = "../static/videoTexture/resistentes.mp4";
@@ -55,10 +38,14 @@ const promoPNG = textureLoader.load('/buttons/promo.png')
 const regresarPNG = textureLoader.load('/buttons/regresar.png')
 const resistentesPNG = textureLoader.load('/buttons/resistentes.png')
 
+const video3Texture = textureLoader.load('/icons/bio_icon.png')
+
 const bgTexture = textureLoader.load('/background/bg_threejs.png')
+bgTexture.wrapS = THREE.MirroredRepeatWrapping
 
 const video0Texture = new THREE.VideoTexture(resistentesVideo)
-
+const video1Texture = new THREE.VideoTexture(otrosVideo)
+video1Texture.format = THREE.RGBAFormat;
 // Debug
 //const gui = new dat.GUI()
 
@@ -189,7 +176,7 @@ screenRecordButton.position.set(1,0.5,1.5)
  */
 
 const video0Mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(4, 3),
+    new THREE.PlaneGeometry(4.5, 2.8),
     new THREE.MeshStandardMaterial({
         map:video0Texture,
         color: 'white',
@@ -197,7 +184,137 @@ const video0Mesh = new THREE.Mesh(
     })
 )
 video0Mesh.position.set(0,4,1)
-scene.add(video0Mesh)
+
+const video1Mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(4, 3),
+    new THREE.MeshStandardMaterial({
+        map:video1Texture,
+        color: 'white',
+        side: THREE.DoubleSide,
+        alphaTest: 0.5
+    })
+)
+video1Mesh.position.set(0,4,1)
+
+const video3Mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(3.2, 3),
+    new THREE.MeshStandardMaterial({
+        map:video3Texture,
+        color: 'white',
+        side: THREE.DoubleSide,
+        alphaTest: 0.5
+    })
+)
+video3Mesh.position.set(0,4,1)
+
+//Buttons Events
+
+let currentVideo = null
+
+const resistentesButton = document.querySelector('.button-0')
+resistentesButton.addEventListener('click', (e) => {
+    currentVideo = 0
+    resistentesVideo.currentTime = 0
+    scene.add(video0Mesh)
+    resistentesVideo.play()
+    if (currentVideo === 0) {
+        hideButton.classList.remove('hide')
+    }else{
+        hideButton.classList.toggle('hide')
+    }
+    scene.remove(video1Mesh,video3Mesh)
+})
+
+
+const otrosButton = document.querySelector('.button-1')
+otrosButton.addEventListener('click', (e) => {
+    resistentesVideo.pause()
+    currentVideo = 1
+    otrosVideo.currentTime = 0
+    scene.add(video1Mesh)
+    otrosVideo.play()
+    if (currentVideo === 1) {
+        hideButton.classList.remove('hide')
+    }else{
+        hideButton.classList.toggle('hide')
+    }
+    scene.remove(video0Mesh,video3Mesh)
+})
+
+const biodegradableButton = document.querySelector('.button-3')
+biodegradableButton.addEventListener('click', (e) => {
+    resistentesVideo.pause()
+    currentVideo = 3
+    scene.add(video3Mesh)
+    otrosVideo.play()
+    if (currentVideo === 3) {
+        hideButton.classList.remove('hide')
+    }else{
+        hideButton.classList.toggle('hide')
+    }
+    scene.remove(video0Mesh,video1Mesh)
+})
+
+
+hideButton.addEventListener('click', (e) => {
+    switch (currentVideo) {
+        case 0:
+            scene.remove(video0Mesh)
+            resistentesVideo.pause()
+            resistentesVideo.currentTime = 0
+            break;
+        case 1:
+            scene.remove(video1Mesh)
+            otrosVideo.pause()
+            otrosVideo.currentTime = 0
+            break;
+        case 3:
+            scene.remove(video3Mesh)
+            break;
+        default:
+            break;
+    }
+    hideButton.classList.toggle('hide')
+})
+
+//ANIMATION
+gsap.to(video3Mesh.scale,{
+    x:1.2,
+    y:1.2,
+    duration:2,
+    ease:'Elastic.easeOut',
+    yoyo:true,
+    repeat: -1,
+})
+
+gsap.to(resistentesButton,{
+    css:{scale:1.1},
+    duration:0.8,
+    ease:'power4.out',
+    yoyo:true,
+    repeat: -1,
+})
+gsap.to(otrosButton,{
+    css:{scale:1.1},
+    duration:0.8,
+    ease:'power4.out',
+    yoyo:true,
+    repeat: -1,
+})
+gsap.to(promocionButton,{
+    css:{scale:1.1},
+    duration:0.8,
+    ease:'power4.out',
+    yoyo:true,
+    repeat: -1,
+})
+gsap.to(biodegradableButton,{
+    css:{scale:1.1},
+    duration:0.8,
+    ease:'power4.out',
+    yoyo:true,
+    repeat: -1,
+})
 
 
 /**
@@ -293,10 +410,6 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
-
-    //videoTexture
-    //video0Texture.needsUpdate = true
-
 
     // Update controls
     controls.update()

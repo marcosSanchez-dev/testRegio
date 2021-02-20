@@ -60,7 +60,6 @@ scene.background = bgTexture
 const objectLoader = new OBJLoader()
 
 
-const regioMeshGlobal = []
 objectLoader.load(
     '/models/regio/ToallasOBJ.obj',
     (gltf) => {
@@ -68,9 +67,8 @@ objectLoader.load(
         //console.log(gltf);
         const regioMesh = [...gltf.children]
         scene.add(regioMesh[0])
-        regioMeshGlobal.push(regioMesh[0])
         regioMesh[0].scale.set(0.5,0.5,0.5)
-        regioMesh[0].position.set(0,0.5,0)
+        regioMesh[0].position.set(-1.5,0.7,0)
         regioMesh[0].material.map = regioColorTexture
         regioMesh[0].material.transparent = true
         regioMesh[0].material.aoMap = regioAmbientTexture
@@ -80,6 +78,43 @@ objectLoader.load(
         regioMesh[0].material.metalness = 1
         regioMesh[0].material.shininess = 50
 
+        /*
+        const geometryTest = new THREE.BoxGeometry( 1, 1, 1 );
+        const materialTest = new THREE.MeshBasicMaterial( {color: 'white'} );
+        const cubeTest = new THREE.Mesh( geometryTest, materialTest );
+        cubeTest.position.set(0,4,0)
+        scene.add(cubeTest)
+        const meshesTest = [regioMesh[0],cubeTest]
+        for (let i = 0; i < 2; i++) {
+            const controls = new OrbitControls(meshesTest[i], canvas)
+                //controls.minAzimuthAngle = - 0.5; // radians
+            //controls.maxAzimuthAngle = 0.5; // radians
+            controls.minPolarAngle = 1.55; // radians
+            controls.maxPolarAngle = 1.55; // radians
+            controls.target.set(-1.5, 0.75, 0)
+            controls.enableDamping = true
+            controls.enablePan = false
+        }
+        */
+        const controlsRegio = new OrbitControls(regioMesh[0], canvas)
+        //controls.minAzimuthAngle = - 0.5; // radians
+        //controls.maxAzimuthAngle = 0.5; // radians
+        controlsRegio.minPolarAngle = 1.55; // radians
+        controlsRegio.maxPolarAngle = 1.55; // radians
+        controlsRegio.target.set(-1.5, 0.69, 0)
+        controlsRegio.enableDamping = true
+        controlsRegio.enablePan = false
+
+        
+        /*window.requestAnimationFrame(() => {
+            controls.update()
+        })*/
+        /*
+        const aabb = new THREE.Box3().setFromObject( gltf.scene )
+        aabb.getCenter( controls.target )
+        aabb.position.set(-2,0.5,0)
+        controls.target.copy( regioMesh[0].position ).add( aabb.position.x );
+        */
     },
     () => {
         console.log('esta en progreso...');
@@ -206,6 +241,7 @@ const video3Mesh = new THREE.Mesh(
     })
 )
 video3Mesh.position.set(0,4,1)
+
 
 //Buttons Events
 
@@ -378,15 +414,15 @@ camera.position.set(0, 1, 10)
 scene.add(camera)
 
 // Controls
-const controls = new OrbitControls(camera, canvas)
+/*
+const controlsScene = new OrbitControls(camera, canvas)
 //controls.minAzimuthAngle = - 0.5; // radians
 //controls.maxAzimuthAngle = 0.5; // radians
-controls.minPolarAngle = 1.3; // radians
-controls.maxPolarAngle = 0.5; // radians
-controls.target.set(0, 0.75, 0)
-controls.enableDamping = true
-controls.target.set(0,0,0)
-controls.enablePan = false
+controlsScene.minPolarAngle = 1.55; // radians
+controlsScene.maxPolarAngle = 1.55; // radians
+controlsScene.enableDamping = true
+controlsScene.enablePan = false
+*/
 
 /**
  * Renderer
@@ -412,7 +448,7 @@ const tick = () =>
     previousTime = elapsedTime
 
     // Update controls
-    controls.update()
+    //controlsScene.update()
 
     // Render
     renderer.render(scene, camera)

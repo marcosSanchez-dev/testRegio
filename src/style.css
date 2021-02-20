@@ -21,7 +21,7 @@ body
     position: absolute;
     height: 7vw;
     width: 23vw;
-    left: 75vw;
+    left: 65vw;
     display: flex;
     vertical-align: middle;
     justify-content: center;
@@ -33,16 +33,16 @@ body
     box-shadow:rgba(255,255,255,0.5) 1px 1px 10px 5px;
 }
 .button-0{
-    top: 36%;
+    top: 40%;
 }
 .button-1{
-    top: 42%;
+    top: 46%;
 }
 .button-2{
-    top: 48%;
+    top: 52%;
 }
 .button-3{
-    top: 54%;
+    top: 59%;
 }
 img{
     width: 100%;

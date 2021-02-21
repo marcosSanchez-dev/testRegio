@@ -88,7 +88,7 @@ objectLoader.load(
         }
         */
         const controlsRegio = new OrbitControls(regioMesh[0], canvas)
-        controlsRegio.minPolarAngle = 1; // radians
+        controlsRegio.minPolarAngle = 1.6; // radians
         controlsRegio.maxPolarAngle = 1; // radians
         regioMesh[0].position.set(-1.5,0.7,0)
         controlsRegio.target.set(-1.5, 0.69, 0)
@@ -111,7 +111,7 @@ function saveAsImage() {
     try {
         let strMime = "image/jpeg";
         imgData = renderer.domElement.toDataURL(strMime);
-        saveFile(imgData.replace(strMime, strDownloadMime), "test.jpg");
+        saveFile(imgData.replace(strMime, strDownloadMime), "screenShot.jpg");
     } catch (e) {
         console.log(e);
         return;
@@ -442,12 +442,14 @@ play.addEventListener('click', () => {
 
     if (playing) {
         recorder.start();
+        playing = true
     } else {
         recorder.stop();
+        playing = false
     }
 
     download.disabled = playing;
-    play.innerHTML = `${playing ? 'Stop' : 'Stop'} Recording`;
+    play.innerHTML = `${playing ? 'Stop' : 'Start'} Recording`;
 });
 
 const data = [];
@@ -463,7 +465,7 @@ download.onclick = () => {
     const a = document.createElement('a');
     a.style.display = 'none';
     a.href = url;
-    a.download = 'recording.webm';
+    a.download = 'screenRecorder.webm';
     document.body.appendChild(a);
     a.click();
 

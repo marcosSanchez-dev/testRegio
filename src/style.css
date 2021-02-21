@@ -28,7 +28,7 @@ body
     cursor: pointer;
     z-index: 1;
 }
-.button:hover,.screen-shot:hover,.play-video:hover,.stop-video:hover{
+.button:hover,{
     box-shadow:rgba(255,255,255,0.5) 1px 1px 10px 5px;
 }
 .button-0{
@@ -89,7 +89,7 @@ video{
     border:1px solid blue
 }
 
-.screen-shot, .play-video, .stop-video{
+.screen-shot{
     position: absolute;
     bottom: 10%;
     width: 20vw;
@@ -98,16 +98,29 @@ video{
 .screen-shot{
     left: 30%
 }
-.play-video{
-    left: 55%
-}
-.stop-video{
-    left: 80%;
-}
+
 .controls {
     position: absolute;
     bottom: 16px;
-    left: 80vw;
+    left: 76vw;
     transform: translate(-50%, -50%);
     z-index: 10;
+}
+button{
+    background-color: rgba(255, 69, 109,0.7); /* Green */
+    border: none;
+    color: white;
+    padding: 2vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin: 2%;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.3), 0 17px 50px 0 rgba(0,0,0,0.3);
+    border-radius: 50%;
+    height:100%;
+}
+.play-video{
+    background-color: rgba(50, 255, 50,0.9);
 }

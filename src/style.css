@@ -29,7 +29,7 @@ body
     cursor: pointer;
     z-index: 1;
 }
-.button:hover{
+.button:hover,.screen-shot:hover,.video-shot:hover{
     box-shadow:rgba(255,255,255,0.5) 1px 1px 10px 5px;
 }
 .button-0{
@@ -87,4 +87,17 @@ video{
     left: 50%;
     width: 20vw;
     border:1px solid blue
+}
+
+.screen-shot, .video-shot{
+    position: absolute;
+    bottom: 10%;
+    width: 20vw;
+    height: 20vw;
+}
+.screen-shot{
+    left: 30%
+}
+.video-shot{
+    left: 60%
 }

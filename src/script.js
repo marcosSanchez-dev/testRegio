@@ -1,24 +1,18 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'dat.gui'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { Vector3 } from 'three'
 import gsap from 'gsap'
 
+// Create a capturer that exports a WebM video
 //DOM
 const hideButton = document.querySelector('.hide-button-0')
 
-const promocionButton = document.querySelector('.button-2')
-
 const resistentesVideo = document.getElementById('video-0')
 const otrosVideo = document.getElementById('video-1')
+const promoVideo = document.getElementById('video-2')
 
-/*var video0Element = document.createElement('video');
-video0Element.src = "../static/videoTexture/resistentes.mp4";
-video0Element.load();
-console.log(video0Element);
-//video0Element.play();*/
 /**
     TEXTURAS
  */
@@ -29,15 +23,6 @@ const regioAmbientTexture = textureLoader.load('/textures/ao_map.png')
 const regioNormalTexture = textureLoader.load('/textures/normal.png')
 const regioRoughTexture = textureLoader.load('/textures/roughness.png')
 
-const screenShotPNG = textureLoader.load('/icons/camara.png')
-const screenRecordPNG = textureLoader.load('/icons/video.png')
-
-const bioPNG = textureLoader.load('/buttons/bio.png')
-const otrosPNG = textureLoader.load('/buttons/otros.png')
-const promoPNG = textureLoader.load('/buttons/promo.png')
-const regresarPNG = textureLoader.load('/buttons/regresar.png')
-const resistentesPNG = textureLoader.load('/buttons/resistentes.png')
-
 const video3Texture = textureLoader.load('/icons/bio_icon.png')
 
 const bgTexture = textureLoader.load('/background/bg_threejs.png')
@@ -45,7 +30,9 @@ bgTexture.wrapS = THREE.MirroredRepeatWrapping
 
 const video0Texture = new THREE.VideoTexture(resistentesVideo)
 const video1Texture = new THREE.VideoTexture(otrosVideo)
+const video2Texture = new THREE.VideoTexture(promoVideo)
 video1Texture.format = THREE.RGBAFormat;
+video2Texture.format = THREE.RGBAFormat;
 // Debug
 //const gui = new dat.GUI()
 
@@ -68,7 +55,6 @@ objectLoader.load(
         const regioMesh = [...gltf.children]
         scene.add(regioMesh[0])
         regioMesh[0].scale.set(0.5,0.5,0.5)
-        regioMesh[0].position.set(-1.5,0.7,0)
         regioMesh[0].material.map = regioColorTexture
         regioMesh[0].material.transparent = true
         regioMesh[0].material.aoMap = regioAmbientTexture
@@ -97,24 +83,10 @@ objectLoader.load(
         }
         */
         const controlsRegio = new OrbitControls(regioMesh[0], canvas)
-        //controls.minAzimuthAngle = - 0.5; // radians
-        //controls.maxAzimuthAngle = 0.5; // radians
-        controlsRegio.minPolarAngle = 1.55; // radians
-        controlsRegio.maxPolarAngle = 1.55; // radians
+        controlsRegio.minPolarAngle = 1; // radians
+        controlsRegio.maxPolarAngle = 1; // radians
+        regioMesh[0].position.set(-1.5,0.7,0)
         controlsRegio.target.set(-1.5, 0.69, 0)
-        controlsRegio.enableDamping = true
-        controlsRegio.enablePan = false
-
-        
-        /*window.requestAnimationFrame(() => {
-            controls.update()
-        })*/
-        /*
-        const aabb = new THREE.Box3().setFromObject( gltf.scene )
-        aabb.getCenter( controls.target )
-        aabb.position.set(-2,0.5,0)
-        controls.target.copy( regioMesh[0].position ).add( aabb.position.x );
-        */
     },
     () => {
         console.log('esta en progreso...');
@@ -124,66 +96,8 @@ objectLoader.load(
     }
 )
 
-//buttons
+//SCREEN SHOT buttons
 /*
-const buttonsGroup = new THREE.Group()
-buttonsGroup.position.set(3,0,0)
-scene.add(buttonsGroup)
-
-const bioButton = new THREE.Mesh(
-    new THREE.PlaneGeometry(2,1),
-    new THREE.MeshStandardMaterial({
-        map: bioPNG,
-        side: THREE.DoubleSide,
-        transparent: true
-    })
-)
-bioButton.position.set(0,1,0)
-
-const otrosButton = new THREE.Mesh(
-    new THREE.PlaneGeometry(2,1),
-    new THREE.MeshStandardMaterial({
-        map: otrosPNG,
-        side: THREE.DoubleSide,
-        transparent: true
-    })
-)
-otrosButton.position.set(0,2.5,0)
-
-const promoButton = new THREE.Mesh(
-    new THREE.PlaneGeometry(2,1),
-    new THREE.MeshStandardMaterial({
-        map: promoPNG,
-        side: THREE.DoubleSide,
-        transparent: true
-    })
-)
-promoButton.position.set(2.5,1,0)
-
-/*const regresarButton = new THREE.Mesh(
-    new THREE.PlaneGeometry(2,1),
-    new THREE.MeshStandardMaterial({
-        map: regresarPNG,
-        side: THREE.DoubleSide,
-        transparent: true
-    })
-)
-regresarButton.position.set(6,3,0)*/
-/*
-
-const resistentesButton = new THREE.Mesh(
-    new THREE.PlaneGeometry(2,1),
-    new THREE.MeshStandardMaterial({
-        map: resistentesPNG,
-        side: THREE.DoubleSide,
-        transparent: true
-    })
-)
-resistentesButton.position.set(2.5,2.5,0)*/
-
-//buttonsGroup.add(bioButton,otrosButton,promoButton,resistentesButton)
-
-//SCREEN SHOT
 const screenShotButton = new THREE.Mesh(
     new THREE.CircleGeometry(0.5,32),
     new THREE.MeshStandardMaterial({
@@ -203,12 +117,43 @@ const screenRecordButton = new THREE.Mesh(
     })
 )
 screenRecordButton.position.set(1,0.5,1.5)
-
+*/
 //scene.add(screenShotButton,screenRecordButton)
 
-/**
+const videoShotButton = document.querySelector('.video-shot')
+
+
+const screenShotButton = document.querySelector('.screen-shot')
+screenShotButton.addEventListener('click', saveAsImage)
+const strDownloadMime = "image/octet-stream";
+function saveAsImage() {
+    let imgData, imgNode;
+
+    try {
+        let strMime = "image/jpeg";
+        imgData = renderer.domElement.toDataURL(strMime);
+        saveFile(imgData.replace(strMime, strDownloadMime), "test.jpg");
+    } catch (e) {
+        console.log(e);
+        return;
+    }
+}
+
+const saveFile = function (strData, filename) {
+    var link = document.createElement('a');
+    if (typeof link.download === 'string') {
+        document.body.appendChild(link); //Firefox requires the link to be in the body
+        link.download = filename;
+        link.href = strData;
+        link.click();
+        document.body.removeChild(link); //remove the link when done
+    } else {
+        location.replace(uri);
+    }
+}
+/*
     videoTexture
- */
+*/
 
 const video0Mesh = new THREE.Mesh(
     new THREE.PlaneGeometry(4.5, 2.8),
@@ -218,10 +163,10 @@ const video0Mesh = new THREE.Mesh(
         side: THREE.DoubleSide,
     })
 )
-video0Mesh.position.set(0,4,1)
+video0Mesh.position.set(0,4.3,1)
 
 const video1Mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(4, 3),
+    new THREE.PlaneGeometry(4, 4),
     new THREE.MeshStandardMaterial({
         map:video1Texture,
         color: 'white',
@@ -229,10 +174,21 @@ const video1Mesh = new THREE.Mesh(
         alphaTest: 0.5
     })
 )
-video1Mesh.position.set(0,4,1)
+video1Mesh.position.set(0,4.3,1)
+
+const video2Mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(4, 4),
+    new THREE.MeshStandardMaterial({
+        map:video2Texture,
+        color: 'white',
+        side: THREE.DoubleSide,
+        alphaTest: 0.5
+    })
+)
+video2Mesh.position.set(0,4.3,1)
 
 const video3Mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(3.2, 3),
+    new THREE.PlaneGeometry(3.2, 3.2),
     new THREE.MeshStandardMaterial({
         map:video3Texture,
         color: 'white',
@@ -240,8 +196,7 @@ const video3Mesh = new THREE.Mesh(
         alphaTest: 0.5
     })
 )
-video3Mesh.position.set(0,4,1)
-
+video3Mesh.position.set(0,4.3,1)
 
 //Buttons Events
 
@@ -258,9 +213,8 @@ resistentesButton.addEventListener('click', (e) => {
     }else{
         hideButton.classList.toggle('hide')
     }
-    scene.remove(video1Mesh,video3Mesh)
+    scene.remove(video1Mesh,video2Mesh,video3Mesh)
 })
-
 
 const otrosButton = document.querySelector('.button-1')
 otrosButton.addEventListener('click', (e) => {
@@ -274,7 +228,22 @@ otrosButton.addEventListener('click', (e) => {
     }else{
         hideButton.classList.toggle('hide')
     }
-    scene.remove(video0Mesh,video3Mesh)
+    scene.remove(video0Mesh,video2Mesh,video3Mesh)
+})
+
+const promocionButton = document.querySelector('.button-2')
+promocionButton.addEventListener('click', (e) => {
+    resistentesVideo.pause()
+    currentVideo = 2
+    promoVideo.currentTime = 0
+    scene.add(video2Mesh)
+    promoVideo.play()
+    if (currentVideo === 2) {
+        hideButton.classList.remove('hide')
+    }else{
+        hideButton.classList.toggle('hide')
+    }
+    scene.remove(video0Mesh,video1Mesh,video3Mesh)
 })
 
 const biodegradableButton = document.querySelector('.button-3')
@@ -288,7 +257,7 @@ biodegradableButton.addEventListener('click', (e) => {
     }else{
         hideButton.classList.toggle('hide')
     }
-    scene.remove(video0Mesh,video1Mesh)
+    scene.remove(video0Mesh,video1Mesh,video2Mesh)
 })
 
 
@@ -303,6 +272,11 @@ hideButton.addEventListener('click', (e) => {
             scene.remove(video1Mesh)
             otrosVideo.pause()
             otrosVideo.currentTime = 0
+            break;
+        case 2:
+            scene.remove(video2Mesh)
+            promoVideo.pause()
+            promoVideo.currentTime = 0
             break;
         case 3:
             scene.remove(video3Mesh)
@@ -352,11 +326,10 @@ gsap.to(biodegradableButton,{
     repeat: -1,
 })
 
-
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.8)
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
 scene.add(ambientLight)
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6)
@@ -368,18 +341,19 @@ directionalLight.shadow.camera.top = 7
 directionalLight.shadow.camera.right = 7
 directionalLight.shadow.camera.bottom = - 7
 directionalLight.position.set(5, 5, 5)
-scene.add(directionalLight)
+//scene.add(directionalLight)
 
 const pointLight = new THREE.PointLight('white')
-pointLight.position.set(0,3,-3)
-//scene.add(pointLight)
+pointLight.distance = 8
+pointLight.position.set(-1.5,1.5,5)
+scene.add(pointLight)
 
 //HELPERS
 
 const axisHelper = new THREE.AxisHelper(2)
 //scene.add(axisHelper)
 
-const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.2)
+const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5)
 //scene.add(pointLightHelper)
 
 /**
@@ -413,22 +387,12 @@ const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 
 camera.position.set(0, 1, 10)
 scene.add(camera)
 
-// Controls
-/*
-const controlsScene = new OrbitControls(camera, canvas)
-//controls.minAzimuthAngle = - 0.5; // radians
-//controls.maxAzimuthAngle = 0.5; // radians
-controlsScene.minPolarAngle = 1.55; // radians
-controlsScene.maxPolarAngle = 1.55; // radians
-controlsScene.enableDamping = true
-controlsScene.enablePan = false
-*/
-
 /**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
+    canvas,
+    preserveDrawingBuffer: true
 })
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
@@ -446,9 +410,6 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
-
-    // Update controls
-    //controlsScene.update()
 
     // Render
     renderer.render(scene, camera)

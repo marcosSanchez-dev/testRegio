@@ -25,6 +25,11 @@ const regioRoughTexture = textureLoader.load('/textures/roughness.png')
 
 const video3Texture = textureLoader.load('/icons/bio_icon.png')
 
+const botton0Texture = textureLoader.load('/buttons/resistentes.png')
+const botton1Texture = textureLoader.load('/buttons/otros.png')
+const botton2Texture = textureLoader.load('/buttons/promo.png')
+const botton3Texture = textureLoader.load('/buttons/bio.png')
+
 const bgTexture = textureLoader.load('/background/bg_threejs.png')
 bgTexture.wrapS = THREE.MirroredRepeatWrapping
 
@@ -96,33 +101,7 @@ objectLoader.load(
     }
 )
 
-//SCREEN SHOT buttons
-/*
-const screenShotButton = new THREE.Mesh(
-    new THREE.CircleGeometry(0.5,32),
-    new THREE.MeshStandardMaterial({
-        map:screenShotPNG,
-        side: THREE.DoubleSide,
-        transparent: true
-    })
-)
-screenShotButton.position.set(0-1,0.5,1.5)
-
-const screenRecordButton = new THREE.Mesh(
-    new THREE.CircleGeometry(0.5,32),
-    new THREE.MeshStandardMaterial({
-        map: screenRecordPNG,
-        side: THREE.DoubleSide,
-        transparent: true   
-    })
-)
-screenRecordButton.position.set(1,0.5,1.5)
-*/
-//scene.add(screenShotButton,screenRecordButton)
-
-const videoShotButton = document.querySelector('.video-shot')
-
-
+//SCREEN SHOT 
 const screenShotButton = document.querySelector('.screen-shot')
 screenShotButton.addEventListener('click', saveAsImage)
 const strDownloadMime = "image/octet-stream";
@@ -160,7 +139,6 @@ const video0Mesh = new THREE.Mesh(
     new THREE.MeshStandardMaterial({
         map:video0Texture,
         color: 'white',
-        side: THREE.DoubleSide,
     })
 )
 video0Mesh.position.set(0,4.3,1)
@@ -170,7 +148,6 @@ const video1Mesh = new THREE.Mesh(
     new THREE.MeshStandardMaterial({
         map:video1Texture,
         color: 'white',
-        side: THREE.DoubleSide,
         alphaTest: 0.5
     })
 )
@@ -181,7 +158,6 @@ const video2Mesh = new THREE.Mesh(
     new THREE.MeshStandardMaterial({
         map:video2Texture,
         color: 'white',
-        side: THREE.DoubleSide,
         alphaTest: 0.5
     })
 )
@@ -192,13 +168,59 @@ const video3Mesh = new THREE.Mesh(
     new THREE.MeshStandardMaterial({
         map:video3Texture,
         color: 'white',
-        side: THREE.DoubleSide,
         alphaTest: 0.5
     })
 )
 video3Mesh.position.set(0,4.3,1)
 
 //Buttons Events
+
+const buttonsGroup = new THREE.Group()
+scene.add(buttonsGroup)
+
+const button0Mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry( 2.1, 0.6),
+    new THREE.MeshBasicMaterial({
+        color:'white',
+        map: botton0Texture,
+        transparent: true
+    })
+)
+button0Mesh.position.set(2.3,2.2,0)
+
+const button1Mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry( 2.1, 0.6),
+    new THREE.MeshBasicMaterial({
+        color:'white',
+        map: botton1Texture,
+        transparent: true
+    })
+)
+button1Mesh.position.set(2.3,1.3,0)
+
+const button2Mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry( 2.1, 0.6),
+    new THREE.MeshBasicMaterial({
+        color:'white',
+        map: botton2Texture,
+        transparent: true
+    })
+)
+button2Mesh.position.set(2.3,0.4,0)
+
+const button3Mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry( 2.1, 0.6),
+    new THREE.MeshBasicMaterial({
+        color:'white',
+        map: botton3Texture,
+        transparent: true
+    })
+)
+button3Mesh.position.set(2.3,-0.7,0)
+
+
+buttonsGroup.add(button0Mesh,button1Mesh,button2Mesh,button3Mesh)
+
 
 let currentVideo = null
 
@@ -297,29 +319,37 @@ gsap.to(video3Mesh.scale,{
     repeat: -1,
 })
 
-gsap.to(resistentesButton,{
-    css:{scale:1.1},
+gsap.to(button0Mesh.scale,{
+    x:1.1,
+    y:1.1,
+    z:0,
     duration:0.8,
     ease:'power4.out',
     yoyo:true,
     repeat: -1,
 })
-gsap.to(otrosButton,{
-    css:{scale:1.1},
+gsap.to(button1Mesh.scale,{
+    x:1.1,
+    y:1.1,
+    z:0,
     duration:0.8,
     ease:'power4.out',
     yoyo:true,
     repeat: -1,
 })
-gsap.to(promocionButton,{
-    css:{scale:1.1},
+gsap.to(button2Mesh.scale,{
+    x:1.1,
+    y:1.1,
+    z:0,
     duration:0.8,
     ease:'power4.out',
     yoyo:true,
     repeat: -1,
 })
-gsap.to(biodegradableButton,{
-    css:{scale:1.1},
+gsap.to(button3Mesh.scale,{
+    x:1.1,
+    y:1.1,
+    z:0,
     duration:0.8,
     ease:'power4.out',
     yoyo:true,
@@ -392,12 +422,57 @@ scene.add(camera)
  */
 const renderer = new THREE.WebGLRenderer({
     canvas,
-    preserveDrawingBuffer: true
+    antialias:true
 })
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+//VIDEO RECORDER
+const stream = renderer.domElement.captureStream();
+const recorder = new MediaRecorder(stream, { type: 'video/webm' });
+
+const play = document.querySelector('.play-video');
+
+let playing = false;
+
+play.addEventListener('click', () => {
+    playing = !playing;
+
+    if (playing) {
+        recorder.start();
+    } else {
+        recorder.stop();
+    }
+
+    download.disabled = playing;
+    play.innerHTML = `${playing ? 'Stop' : 'Stop'} Recording`;
+});
+
+const data = [];
+
+recorder.ondataavailable = e => data.push(e.data);
+
+const download = document.querySelector('.download');
+
+download.onclick = () => {
+    const blob = new Blob(data, { type: 'video/webm' });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'recording.webm';
+    document.body.appendChild(a);
+    a.click();
+
+    setTimeout(() => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }, 100);
+};
+
 
 /**
  * Animate

@@ -55,7 +55,7 @@ const objectLoader = new OBJLoader()
 objectLoader.load(
     '/models/regio/ToallasOBJ.obj',
     (gltf) => {
-        console.log('exito!');
+        //console.log('exito!');
         //console.log(gltf);
         const regioMesh = [...gltf.children]
         scene.add(regioMesh[0])
@@ -68,36 +68,18 @@ objectLoader.load(
         regioMesh[0].material.roughness = 1
         regioMesh[0].material.metalness = 1
         regioMesh[0].material.shininess = 50
-
-        /*
-        const geometryTest = new THREE.BoxGeometry( 1, 1, 1 );
-        const materialTest = new THREE.MeshBasicMaterial( {color: 'white'} );
-        const cubeTest = new THREE.Mesh( geometryTest, materialTest );
-        cubeTest.position.set(0,4,0)
-        scene.add(cubeTest)
-        const meshesTest = [regioMesh[0],cubeTest]
-        for (let i = 0; i < 2; i++) {
-            const controls = new OrbitControls(meshesTest[i], canvas)
-                //controls.minAzimuthAngle = - 0.5; // radians
-            //controls.maxAzimuthAngle = 0.5; // radians
-            controls.minPolarAngle = 1.55; // radians
-            controls.maxPolarAngle = 1.55; // radians
-            controls.target.set(-1.5, 0.75, 0)
-            controls.enableDamping = true
-            controls.enablePan = false
-        }
-        */
         const controlsRegio = new OrbitControls(regioMesh[0], canvas)
         controlsRegio.minPolarAngle = 1.6; // radians
         controlsRegio.maxPolarAngle = 1; // radians
         regioMesh[0].position.set(-1.5,0.7,0)
         controlsRegio.target.set(-1.5, 0.69, 0)
+        controlsRegio.rotateSpeed *= -1;
     },
     () => {
-        console.log('esta en progreso...');
+        //console.log('esta en progreso...');
     },
     () => {
-        console.log('hay un ERROR');
+        //console.log('hay un ERROR');
     }
 )
 
@@ -355,6 +337,14 @@ gsap.to(button3Mesh.scale,{
     yoyo:true,
     repeat: -1,
 })
+gsap.to(screenShotButton,{
+    css:{scale:1.1},
+    duration:0.8,
+    ease:'power4.out',
+    yoyo:true,
+    repeat: -1,
+})
+
 
 /**
  * Lights
@@ -380,10 +370,10 @@ scene.add(pointLight)
 
 //HELPERS
 
-const axisHelper = new THREE.AxisHelper(2)
+//const axisHelper = new THREE.AxisHelper(2)
 //scene.add(axisHelper)
 
-const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5)
+//const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5)
 //scene.add(pointLightHelper)
 
 /**
@@ -430,6 +420,7 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 //VIDEO RECORDER
+/*
 const stream = renderer.domElement.captureStream();
 const recorder = new MediaRecorder(stream, { type: 'video/webm' });
 
@@ -474,7 +465,7 @@ download.onclick = () => {
         window.URL.revokeObjectURL(url);
     }, 100);
 };
-
+*/
 
 /**
  * Animate

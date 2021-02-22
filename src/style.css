@@ -19,8 +19,8 @@ body
 }
 .button{
     position: absolute;
-    height: 2.1rem;
-    width: 7rem;
+    height: 1.8rem;
+    width: 6rem;
     display: flex;
     vertical-align: middle;
     justify-content: center;
@@ -29,14 +29,22 @@ body
     margin: 0 57.5vw;
 }
 
+@media screen and (min-width: 1023px){
+    .button{
+        margin: 0 60vw !important;
+        height:2rem;
+    }
+}
 @media screen and (min-width: 897px){
     .button{
         margin: 0 56vw !important;
     }
 }
-@media screen and (min-width: 780px){
+@media screen and (min-width: 768px){
     .button{
-        margin: 0 56.5vw;
+        margin: 0 59.5vw;
+        width: 20vw;
+        height: 2.5rem;
     }
 }
 @media screen and (max-width: 690px){
@@ -54,9 +62,16 @@ body
         margin: 0 59.7vw;
     }
 }
-@media screen and (max-width: 450px){
+@media screen and (max-width: 414px){
     .button{
-        margin: 0 61.5vw;
+        margin: 0 63vw;
+        width: 27vw;
+    }
+}
+@media screen and (max-width: 411px){
+    .button{
+        margin: 0 63.5vw;
+        width: 28vw;
     }
 }
 @media screen and (max-width: 393px){
@@ -64,9 +79,21 @@ body
         margin: 0 64.5vw;
     }
 }
-.button:hover{
-    box-shadow:rgba(255,255,255,0.5) 1px 1px 10px 5px;
+@media screen and (max-width: 375px){
+    .button{
+        margin: 0 66.5vw;
+        height:2.1rem;
+        width:32vw;
+    }
 }
+@media screen and (max-width: 360px){
+    .button{
+        margin: 0 63vw;
+        width: 26vw;
+        height:1.7rem;
+    }
+}
+
 .button-0{
     top: 40%;
 }
@@ -127,8 +154,7 @@ video{
 .screen-shot{
     position: absolute;
     bottom: 10%;
-    left: 45%;
-    
+    left: 43vw;
 }
 
 .controls {

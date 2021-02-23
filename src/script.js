@@ -12,7 +12,9 @@ const hideButton = document.querySelector('.hide-button-0')
 const resistentesVideo = document.getElementById('video-0')
 const otrosVideo = document.getElementById('video-1')
 const promoVideo = document.getElementById('video-2')
-
+const regioLink = document.getElementById('regio-link')
+//const testVideo = document.getElementById('video-5')
+//testVideo.play()
 /**
     TEXTURAS
  */
@@ -36,10 +38,59 @@ bgTexture.wrapS = THREE.MirroredRepeatWrapping
 const video0Texture = new THREE.VideoTexture(resistentesVideo)
 const video1Texture = new THREE.VideoTexture(otrosVideo)
 const video2Texture = new THREE.VideoTexture(promoVideo)
+//const video5Texture = new THREE.VideoTexture(testVideo)
 video1Texture.format = THREE.RGBAFormat;
 video2Texture.format = THREE.RGBAFormat;
+//video5Texture.format = THREE.RGBAFormat;
 // Debug
 //const gui = new dat.GUI()
+
+//greenScreen
+
+/*
+let processor = {
+    timerCallback: function(){
+        if(this.video.paused || this.video.ended){
+            return;
+        }
+        this.computeFrame()
+        let self = this
+        setTimeout(function () {
+            self.timerCallback()
+        },0)
+    },
+    doLoad: function () {
+        this.video = document.querySelector('#video-1')
+        this.c1 = document.querySelector('#c1')
+        this.ctx1 = this.c1.getContext('2d')
+        this.c2 = document.querySelector('#c2')
+        this.ctx2 = this.c2.getContext('2d')
+        let self = this
+        this.video.addEventListener('play', function () {
+            self.width = self.video.videoWidth
+            self.height = self.video.videoHeight
+            self.timerCallback()
+        })
+    },
+    computeFrame: function () {
+        this.ctx1.drawImage(this.video,0,0,this.width,this.height)
+        let frame = this.ctx1.getImageData(0,0,this.width,this.height)
+        let l = frame.data.length / 4;
+
+        for(let i = 0; i < l; i++){
+            let r = frame.data[i*4 + 0]
+            let g = frame.data[i*4 + 1]
+            let b = frame.data[i*4 + 2]
+            if(g > 220) frame.data[i * 4 + 3] = 0
+        }
+        this.ctx2.putImageData(frame,0,0)
+        return;
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    processor.doLoad()
+})
+*/
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -130,7 +181,7 @@ const video1Mesh = new THREE.Mesh(
     new THREE.MeshStandardMaterial({
         map:video1Texture,
         color: 'white',
-        alphaTest: 0.5
+        alphaTest:0.5    
     })
 )
 video1Mesh.position.set(0,4.3,1)
@@ -178,7 +229,7 @@ const button1Mesh = new THREE.Mesh(
         transparent: true
     })
 )
-button1Mesh.position.set(2.3,1.3,0)
+button1Mesh.position.set(2.3,1.27,0)
 
 const button2Mesh = new THREE.Mesh(
     new THREE.PlaneGeometry( 2.1, 0.6),
@@ -188,7 +239,7 @@ const button2Mesh = new THREE.Mesh(
         transparent: true
     })
 )
-button2Mesh.position.set(2.3,0.4,0)
+button2Mesh.position.set(2.3,0.28,0)
 
 const button3Mesh = new THREE.Mesh(
     new THREE.PlaneGeometry( 2.1, 0.6),
@@ -212,6 +263,7 @@ resistentesButton.addEventListener('click', (e) => {
     resistentesVideo.currentTime = 0
     scene.add(video0Mesh)
     resistentesVideo.play()
+    promoGif.classList.add('hide')
     if (currentVideo === 0) {
         hideButton.classList.remove('hide')
     }else{
@@ -220,8 +272,39 @@ resistentesButton.addEventListener('click', (e) => {
     scene.remove(video1Mesh,video2Mesh,video3Mesh)
 })
 
+/*
+function botton0EventListener(e) {
+    currentVideo = 0
+    resistentesVideo.currentTime = 0
+    scene.add(video0Mesh)
+    resistentesVideo.play()
+    if (currentVideo === 0) {
+        hideButton.classList.remove('hide')
+    }else{
+        hideButton.classList.toggle('hide')
+    }
+    scene.remove(video1Mesh,video2Mesh,video3Mesh)
+}
+*/
+
 const otrosButton = document.querySelector('.button-1')
 otrosButton.addEventListener('click', (e) => {
+    resistentesVideo.pause()
+    currentVideo = 1
+    otrosVideo.currentTime = 0
+    scene.add(video1Mesh)
+    otrosVideo.play()
+    promoGif.classList.add('hide')
+    if (currentVideo === 1) {
+        hideButton.classList.remove('hide')
+    }else{
+        hideButton.classList.toggle('hide')
+    }
+    scene.remove(video0Mesh,video2Mesh,video3Mesh)
+})
+
+/*
+function botton1EventListener(e) {
     resistentesVideo.pause()
     currentVideo = 1
     otrosVideo.currentTime = 0
@@ -233,10 +316,28 @@ otrosButton.addEventListener('click', (e) => {
         hideButton.classList.toggle('hide')
     }
     scene.remove(video0Mesh,video2Mesh,video3Mesh)
-})
+}
+*/
 
+const promoGif = document.getElementById('promo-gif')
 const promocionButton = document.querySelector('.button-2')
 promocionButton.addEventListener('click', (e) => {
+    resistentesVideo.pause()
+    currentVideo = 2
+    promoVideo.currentTime = 0
+    promoGif.classList.toggle('hide')
+    //scene.add(video2Mesh)
+    promoVideo.play()
+    
+    if (currentVideo === 2) {
+        hideButton.classList.remove('hide')
+    }else{
+        hideButton.classList.toggle('hide')
+    }
+    scene.remove(video0Mesh,video1Mesh,video3Mesh)
+})
+/*
+function botton2EventListener(e) {
     resistentesVideo.pause()
     currentVideo = 2
     promoVideo.currentTime = 0
@@ -248,10 +349,25 @@ promocionButton.addEventListener('click', (e) => {
         hideButton.classList.toggle('hide')
     }
     scene.remove(video0Mesh,video1Mesh,video3Mesh)
-})
-
+}
+*/
 const biodegradableButton = document.querySelector('.button-3')
 biodegradableButton.addEventListener('click', (e) => {
+    resistentesVideo.pause()
+    currentVideo = 3
+    scene.add(video3Mesh)
+    otrosVideo.play()
+    promoGif.classList.add('hide')
+    if (currentVideo === 3) {
+        hideButton.classList.remove('hide')
+    }else{
+        hideButton.classList.toggle('hide')
+    }
+    scene.remove(video0Mesh,video1Mesh,video2Mesh)
+})
+
+/*
+function botton3EventListener(e) {
     resistentesVideo.pause()
     currentVideo = 3
     scene.add(video3Mesh)
@@ -262,8 +378,8 @@ biodegradableButton.addEventListener('click', (e) => {
         hideButton.classList.toggle('hide')
     }
     scene.remove(video0Mesh,video1Mesh,video2Mesh)
-})
-
+}
+*/
 
 hideButton.addEventListener('click', (e) => {
     switch (currentVideo) {
@@ -281,6 +397,7 @@ hideButton.addEventListener('click', (e) => {
             scene.remove(video2Mesh)
             promoVideo.pause()
             promoVideo.currentTime = 0
+            promoGif.classList.add('hide')
             break;
         case 3:
             scene.remove(video3Mesh)
@@ -338,6 +455,14 @@ gsap.to(button3Mesh.scale,{
     repeat: -1,
 })
 gsap.to(screenShotButton,{
+    css:{scale:1.1},
+    duration:0.8,
+    ease:'power4.out',
+    yoyo:true,
+    repeat: -1,
+})
+
+gsap.to(regioLink,{
     css:{scale:1.1},
     duration:0.8,
     ease:'power4.out',
@@ -467,17 +592,117 @@ download.onclick = () => {
 };
 */
 
-/**
- * Animate
+//RAYCASTER
+/*
+const raycaster = new THREE.Raycaster()
+
+const mouse = new THREE.Vector2()
+
+window.addEventListener('click', (event) =>
+{
+    mouse.x = event.clientX / sizes.width * 2 - 1
+    mouse.y = - (event.clientY / sizes.height) * 2 + 1
+
+    //console.log(mouse)
+})
+
+let currentIntersect = null
+
+
+window.addEventListener('click', () =>
+{
+    if(currentIntersect)
+    {
+        switch(currentIntersect.object)
+        {
+            case button0Mesh:
+                console.log('click on object 0')
+                botton0EventListener()
+                break
+
+            case button1Mesh:
+                console.log('click on object 1')
+                botton1EventListener()
+                break
+
+            case button2Mesh:
+                console.log('click on object 2')
+                botton2EventListener()
+                break
+            case button3Mesh:
+                console.log('click on object 3')
+                botton3EventListener()
+                break
+        }
+    }
+})
+*/
+
+//POINTS 
+const points = [
+    {
+        position: new THREE.Vector3(1.3, 1, 0),
+        element: document.querySelector('.button-container')
+    }
+]
+
+/*
+    Animate
  */
 const clock = new THREE.Clock()
 let previousTime = 0
+
 
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
+
+    for(const point of points)
+    {
+        const screenPosition = point.position.clone()
+        screenPosition.project(camera)
+
+        const translateX = screenPosition.x * sizes.width * 0.5
+        point.element.style.transform = `translateX(${translateX}px)`
+    }
+
+
+    //cast a ray
+    //const rayOrigin = new THREE.Vector3(2, 3, 0)
+    //const rayDirection = new THREE.Vector3(2, -3, 0)
+    //rayDirection.normalize()
+
+    /*
+    raycaster.setFromCamera(mouse, camera)
+
+    const objectsToTest = [button0Mesh, button1Mesh, button2Mesh,button3Mesh]
+    const intersects = raycaster.intersectObjects(objectsToTest)
+
+    
+    if(intersects.length)
+    {
+        if(!currentIntersect)
+        {
+            //console.log('mouse enter')
+        }
+
+        currentIntersect = intersects[0]
+    }
+    else
+    {
+        if(currentIntersect)
+        {
+            //console.log('mouse leave')
+        }
+
+        currentIntersect = null
+    }
+    //console.log(intersects)
+
+    */
+
 
     // Render
     renderer.render(scene, camera)

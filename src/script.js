@@ -54,6 +54,7 @@ const regioNormalTexture = textureLoader.load('/textures/normal.png')
 const regioRoughTexture = textureLoader.load('/textures/roughness.png')
 
 const video3Texture = textureLoader.load('/icons/bio_icon.png')
+const rotateTexture = textureLoader.load('/icons/360.png')
 
 const botton0Texture = textureLoader.load('/buttons/resistentes.png')
 const botton1Texture = textureLoader.load('/buttons/otros.png')
@@ -135,7 +136,6 @@ objectLoader.load(
         //console.log('exito!');
         //console.log(gltf);
         const regioMesh = [...gltf.children]
-        console.log(regioMesh[0]);
         scene.add(regioMesh[0])
         regioMesh[0].scale.set(0.5,0.5,0.5)
         regioMesh[0].position.set(-1.5,-0.5,0)
@@ -210,7 +210,7 @@ const saveFile = function (strData, filename) {
 
 const video0Mesh = new THREE.Mesh(
     new THREE.PlaneGeometry(4.5, 2.8),
-    new THREE.MeshStandardMaterial({
+    new THREE.MeshBasicMaterial({
         map:video0Texture,
         color: 'white',
     })
@@ -219,7 +219,7 @@ video0Mesh.position.set(0,4.3,1)
 
 const video1Mesh = new THREE.Mesh(
     new THREE.PlaneGeometry(4, 4),
-    new THREE.MeshStandardMaterial({
+    new THREE.MeshBasicMaterial({
         map:video1Texture,
         color: 'white',
         alphaTest:0.5    
@@ -229,7 +229,7 @@ video1Mesh.position.set(0,4.3,1)
 
 const video2Mesh = new THREE.Mesh(
     new THREE.PlaneGeometry(4, 4),
-    new THREE.MeshStandardMaterial({
+    new THREE.MeshBasicMaterial({
         map:video2Texture,
         color: 'white',
         alphaTest: 0.5
@@ -239,13 +239,25 @@ video2Mesh.position.set(0,4.3,1)
 
 const video3Mesh = new THREE.Mesh(
     new THREE.PlaneGeometry(3.2, 3.2),
-    new THREE.MeshStandardMaterial({
+    new THREE.MeshBasicMaterial({
         map:video3Texture,
         color: 'white',
         alphaTest: 0.5
     })
 )
 video3Mesh.position.set(0,4.3,1)
+
+const rotateMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 1),
+    new THREE.MeshBasicMaterial({
+        map:rotateTexture,
+        color: 'white',
+        alphaTest: 0.5,
+        transparent:true
+    })
+)
+rotateMesh.position.set(-1.5,-3,0)
+scene.add(rotateMesh)
 
 //Buttons Events
 

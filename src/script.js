@@ -5,7 +5,37 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { Vector3 } from 'three'
 import gsap from 'gsap'
 
-// Create a capturer that exports a WebM video
+//LOADING BAR
+const loadingBarElement = document.querySelector('.loading-bar')
+const overlayElement = document.querySelector('.black-screen')
+const textLoadingBarElement = document.querySelector('.loadingBar-text')
+
+const loadingManager = new THREE.LoadingManager(
+    //loaded
+    () => {
+        gsap.delayedCall(0.5, () => {
+            gsap.to(overlayElement,{
+                css:{opacity:0,display:'none'},
+                duration:1
+            })
+
+            gsap.to(textLoadingBarElement,{
+                css:{opacity:0,display:'none'},
+                duration:1
+            })
+
+            loadingBarElement.classList.add('ended')
+            loadingBarElement.style.transform = ''
+        })
+    },
+    //progress
+    (itemsUrl,itemsLoaded,itemsTotal) => {
+        
+        const progressRatio = itemsLoaded / itemsTotal
+        loadingBarElement.style.transform = `scaleX(${progressRatio})`
+    }
+)
+
 //DOM
 const hideButton = document.querySelector('.hide-button-0')
 
@@ -13,12 +43,10 @@ const resistentesVideo = document.getElementById('video-0')
 const otrosVideo = document.getElementById('video-1')
 const promoVideo = document.getElementById('video-2')
 const regioLink = document.getElementById('regio-link')
-//const testVideo = document.getElementById('video-5')
-//testVideo.play()
 /**
     TEXTURAS
  */
-const textureLoader = new THREE.TextureLoader();
+const textureLoader = new THREE.TextureLoader(loadingManager);
 
 const regioColorTexture = textureLoader.load('/textures/color.png')
 const regioAmbientTexture = textureLoader.load('/textures/ao_map.png')
@@ -38,12 +66,10 @@ bgTexture.wrapS = THREE.MirroredRepeatWrapping
 const video0Texture = new THREE.VideoTexture(resistentesVideo)
 const video1Texture = new THREE.VideoTexture(otrosVideo)
 const video2Texture = new THREE.VideoTexture(promoVideo)
-//const video5Texture = new THREE.VideoTexture(testVideo)
+
 video1Texture.format = THREE.RGBAFormat;
 video2Texture.format = THREE.RGBAFormat;
-//video5Texture.format = THREE.RGBAFormat;
-// Debug
-//const gui = new dat.GUI()
+
 
 //greenScreen
 
@@ -100,7 +126,7 @@ const scene = new THREE.Scene()
 scene.background = bgTexture
 
 //MODELS
-const objectLoader = new OBJLoader()
+const objectLoader = new OBJLoader(loadingManager)
 
 
 objectLoader.load(
@@ -109,8 +135,10 @@ objectLoader.load(
         //console.log('exito!');
         //console.log(gltf);
         const regioMesh = [...gltf.children]
+        console.log(regioMesh[0]);
         scene.add(regioMesh[0])
         regioMesh[0].scale.set(0.5,0.5,0.5)
+        regioMesh[0].position.set(-1.5,0.8,0)
         regioMesh[0].material.map = regioColorTexture
         regioMesh[0].material.transparent = true
         regioMesh[0].material.aoMap = regioAmbientTexture
@@ -119,12 +147,16 @@ objectLoader.load(
         regioMesh[0].material.roughness = 1
         regioMesh[0].material.metalness = 1
         regioMesh[0].material.shininess = 50
+        
         const controlsRegio = new OrbitControls(regioMesh[0], canvas)
-        controlsRegio.minPolarAngle = 1.6; // radians
-        controlsRegio.maxPolarAngle = 1; // radians
-        regioMesh[0].position.set(-1.5,0.7,0)
-        controlsRegio.target.set(-1.5, 0.69, 0)
+        controlsRegio.minPolarAngle = 90 * Math.PI / 180; // radians
+        controlsRegio.maxPolarAngle = 90 * Math.PI / 180; // radians
+        controlsRegio.target.set(-1.5, 0.79, 0) //90 * Math.PI / 180
         controlsRegio.rotateSpeed *= -1;
+        window.requestAnimationFrame(()=>{
+            controlsRegio.update()
+        })
+        
     },
     () => {
         //console.log('esta en progreso...');
@@ -135,6 +167,7 @@ objectLoader.load(
 )
 
 //SCREEN SHOT 
+/*
 const screenShotButton = document.querySelector('.screen-shot')
 screenShotButton.addEventListener('click', saveAsImage)
 const strDownloadMime = "image/octet-stream";
@@ -163,6 +196,7 @@ const saveFile = function (strData, filename) {
         location.replace(uri);
     }
 }
+*/
 /*
     videoTexture
 */
@@ -264,6 +298,7 @@ resistentesButton.addEventListener('click', (e) => {
     scene.add(video0Mesh)
     resistentesVideo.play()
     promoGif.classList.add('hide')
+    otrosGif.classList.add('hide')
     if (currentVideo === 0) {
         hideButton.classList.remove('hide')
     }else{
@@ -286,14 +321,14 @@ function botton0EventListener(e) {
     scene.remove(video1Mesh,video2Mesh,video3Mesh)
 }
 */
-
+const otrosGif = document.getElementById('otros-gif')
 const otrosButton = document.querySelector('.button-1')
 otrosButton.addEventListener('click', (e) => {
     resistentesVideo.pause()
     currentVideo = 1
     otrosVideo.currentTime = 0
-    scene.add(video1Mesh)
     otrosVideo.play()
+    otrosGif.classList.remove('hide')
     promoGif.classList.add('hide')
     if (currentVideo === 1) {
         hideButton.classList.remove('hide')
@@ -325,7 +360,9 @@ promocionButton.addEventListener('click', (e) => {
     resistentesVideo.pause()
     currentVideo = 2
     promoVideo.currentTime = 0
-    promoGif.classList.toggle('hide')
+    promoGif.classList.remove('hide')
+    otrosGif.classList.add('hide')
+
     //scene.add(video2Mesh)
     promoVideo.play()
     
@@ -358,6 +395,7 @@ biodegradableButton.addEventListener('click', (e) => {
     scene.add(video3Mesh)
     otrosVideo.play()
     promoGif.classList.add('hide')
+    otrosGif.classList.add('hide')
     if (currentVideo === 3) {
         hideButton.classList.remove('hide')
     }else{
@@ -392,6 +430,7 @@ hideButton.addEventListener('click', (e) => {
             scene.remove(video1Mesh)
             otrosVideo.pause()
             otrosVideo.currentTime = 0
+            otrosGif.classList.add('hide')
             break;
         case 2:
             scene.remove(video2Mesh)
@@ -454,6 +493,7 @@ gsap.to(button3Mesh.scale,{
     yoyo:true,
     repeat: -1,
 })
+/*
 gsap.to(screenShotButton,{
     css:{scale:1.1},
     duration:0.8,
@@ -461,7 +501,7 @@ gsap.to(screenShotButton,{
     yoyo:true,
     repeat: -1,
 })
-
+*/
 gsap.to(regioLink,{
     css:{scale:1.1},
     duration:0.8,
@@ -530,7 +570,18 @@ window.addEventListener('resize', () =>
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.set(0, 1, 10)
-scene.add(camera)
+
+//ORBIT CONTROLS
+        /*
+        const controlsRegio = new OrbitControls(regioMesh[0], canvas)
+        controlsRegio.minPolarAngle = 90 * Math.PI / 180; // radians
+        controlsRegio.maxPolarAngle = 90 * Math.PI / 180; // radians
+        controlsRegio.target.set(-1.5, 0.79, 0) //90 * Math.PI / 180
+        controlsRegio.rotateSpeed *= -1;
+        window.requestAnimationFrame(()=>{
+            controlsRegio.update()
+        })
+        */
 
 /**
  * Renderer

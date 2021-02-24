@@ -537,7 +537,7 @@ directionalLight.position.set(5, 5, 5)
 
 const pointLight = new THREE.PointLight('white')
 pointLight.distance = 8
-pointLight.position.set(-1.5,1.5,5)
+pointLight.position.set(-1.5,-0.7,5)
 scene.add(pointLight)
 
 //HELPERS

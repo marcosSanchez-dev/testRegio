@@ -138,7 +138,7 @@ objectLoader.load(
         console.log(regioMesh[0]);
         scene.add(regioMesh[0])
         regioMesh[0].scale.set(0.5,0.5,0.5)
-        regioMesh[0].position.set(-1.5,0.8,0)
+        regioMesh[0].position.set(-1.5,0.1,0)
         regioMesh[0].material.map = regioColorTexture
         regioMesh[0].material.transparent = true
         regioMesh[0].material.aoMap = regioAmbientTexture
@@ -148,14 +148,21 @@ objectLoader.load(
         regioMesh[0].material.metalness = 1
         regioMesh[0].material.shininess = 50
         
+        
         const controlsRegio = new OrbitControls(regioMesh[0], canvas)
         controlsRegio.minPolarAngle = 90 * Math.PI / 180; // radians
         controlsRegio.maxPolarAngle = 90 * Math.PI / 180; // radians
-        controlsRegio.target.set(-1.5, 0.79, 0) //90 * Math.PI / 180
+        controlsRegio.target.set(-1.5, 0.09, 0.1) //90 * Math.PI / 180
         controlsRegio.rotateSpeed *= -1;
-        window.requestAnimationFrame(()=>{
+        
+
+        const update = () => {
+            //regioMesh[0].rotation.z += 0.01
             controlsRegio.update()
-        })
+            //console.log('hola mundo')
+            window.requestAnimationFrame(update)
+        }
+        update()
         
     },
     () => {
@@ -253,7 +260,7 @@ const button0Mesh = new THREE.Mesh(
         transparent: true
     })
 )
-button0Mesh.position.set(2.3,2.2,0)
+button0Mesh.position.set(2.3,1.41,0)
 
 const button1Mesh = new THREE.Mesh(
     new THREE.PlaneGeometry( 2.1, 0.6),
@@ -263,7 +270,7 @@ const button1Mesh = new THREE.Mesh(
         transparent: true
     })
 )
-button1Mesh.position.set(2.3,1.27,0)
+button1Mesh.position.set(2.3,0.45,0)
 
 const button2Mesh = new THREE.Mesh(
     new THREE.PlaneGeometry( 2.1, 0.6),
@@ -273,7 +280,7 @@ const button2Mesh = new THREE.Mesh(
         transparent: true
     })
 )
-button2Mesh.position.set(2.3,0.28,0)
+button2Mesh.position.set(2.3,-0.51,0)
 
 const button3Mesh = new THREE.Mesh(
     new THREE.PlaneGeometry( 2.1, 0.6),
@@ -283,7 +290,7 @@ const button3Mesh = new THREE.Mesh(
         transparent: true
     })
 )
-button3Mesh.position.set(2.3,-0.7,0)
+button3Mesh.position.set(2.3,-1.5,0)
 
 
 buttonsGroup.add(button0Mesh,button1Mesh,button2Mesh,button3Mesh)
